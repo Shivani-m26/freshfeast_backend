@@ -19,6 +19,8 @@ public class UserSubscription {
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "user_id", nullable = false)
     @com.fasterxml.jackson.annotation.JsonIgnore
+    @ToString.Exclude
+    @EqualsAndHashCode.Exclude
     private AppUser user;
 
     private String planType; // BASIC, PRO, CUSTOMIZED

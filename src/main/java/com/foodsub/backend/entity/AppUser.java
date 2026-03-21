@@ -52,6 +52,9 @@ public class AppUser {
     @Builder.Default
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @OrderBy("id DESC")
+    @com.fasterxml.jackson.annotation.JsonIgnore
+    @ToString.Exclude
+    @EqualsAndHashCode.Exclude
     private List<UserSubscription> subscriptions = new java.util.ArrayList<>();
 
     public UserSubscription getCurrentSubscription() {

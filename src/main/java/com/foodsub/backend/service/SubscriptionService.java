@@ -24,8 +24,7 @@ public class SubscriptionService {
         AppUser user = userRepository.findByUsername(username)
                 .orElseThrow(() -> new RuntimeException("User not found"));
 
-        // Calculate total days (Mocking a month as 30 days for simplicity)
-        int totalDays = 30; // Default
+        int totalDays = 30;
         String freq = request.getFrequency() != null ? request.getFrequency() : "ALL";
 
         if ("WEEKDAYS".equalsIgnoreCase(freq)) totalDays = 22;
@@ -58,9 +57,8 @@ public class SubscriptionService {
                 .deliveryAddress(request.getDeliveryAddress())
                 .build();
 
-        // If customized, calculate suggested calories with safety checks
         if ("CUSTOMIZED".equalsIgnoreCase(request.getPlanType())) {
-             Integer userAge = user.getAge() != null ? user.getAge() : 25; // Default age 25
+             Integer userAge = user.getAge() != null ? user.getAge() : 25;
              String userGender = user.getGender() != null ? user.getGender() : "MALE";
              Double uWeight = request.getWeight() != null ? request.getWeight() : 65.0;
              Double uHeight = request.getHeight() != null ? request.getHeight() : 165.0;
@@ -80,14 +78,12 @@ public class SubscriptionService {
         sub.setUser(user);
         user.getSubscriptions().add(sub);
         
-        // Update user profile with latest health data and address
         user.setHeight(request.getHeight() != null ? request.getHeight() : user.getHeight());
         user.setWeight(request.getWeight() != null ? request.getWeight() : user.getWeight());
         if (request.getHealthIssues() != null) user.setHealthIssues(request.getHealthIssues());
         if (request.getDeliveryAddress() != null) user.setAddress(request.getDeliveryAddress());
         if (request.getContactNumber() != null) user.setPhoneNumber(request.getContactNumber());
         
-        // Final save returns managed entity
         return subscriptionRepository.save(sub);
     }
 
@@ -98,5 +94,10 @@ public class SubscriptionService {
         sub.setStatus("ACTIVE");
         sub.setPaymentReference(paymentRef);
         return subscriptionRepository.save(sub);
+    }
+
+    @Transactional
+    public void deleteSubscription(Long id) {
+        subscriptionRepository.deleteById(id);
     }
 }

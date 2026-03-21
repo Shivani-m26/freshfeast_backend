@@ -21,7 +21,13 @@ public class SubscriptionController {
     }
 
     @PostMapping("/{id}/confirm-payment")
-    public ResponseEntity<UserSubscription> confirmPayment(@PathVariable Long id, @RequestParam String paymentRef) {
+    public ResponseEntity<UserSubscription> confirmPayment(@PathVariable("id") Long id, @RequestParam("paymentRef") String paymentRef) {
         return ResponseEntity.ok(subscriptionService.confirmPayment(id, paymentRef));
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> cancelSubscription(@PathVariable("id") Long id) {
+        subscriptionService.deleteSubscription(id);
+        return ResponseEntity.noContent().build();
     }
 }
