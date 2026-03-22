@@ -11,11 +11,15 @@ public class EmailService {
 
     private final JavaMailSender mailSender;
 
+    @org.springframework.beans.factory.annotation.Value("${spring.mail.username}")
+    private String adminEmail;
+
     public void sendContactEmail(String fromEmail, String name, String subject, String message) {
         SimpleMailMessage mail = new SimpleMailMessage();
-        mail.setTo("shivanimanivannan1@gmail.com");
-        mail.setSubject("FreshFeast Query: " + subject);
-        mail.setText("Name: " + name + "\nEmail: " + fromEmail + "\n\nMessage:\n" + message);
+        mail.setTo(adminEmail);
+        mail.setReplyTo(fromEmail);
+        mail.setSubject("FreshFeast Query from " + name + ": " + subject);
+        mail.setText("New query from: " + name + "\nCustomer Email: " + fromEmail + "\n\nMessage:\n" + message);
         mailSender.send(mail);
     }
 }
